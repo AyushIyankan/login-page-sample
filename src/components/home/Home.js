@@ -5,9 +5,17 @@ const Home = () => {
 
   return (
     <div>
-      <h2>Hey there, You are logged in successfully</h2>
+      <h2>
+        Hey there, You are{" "}
+        {googleAuthKey ? "logged in successfully" : "logged out"}
+      </h2>
+      {!googleAuthKey && (
+        <button>
+          <a href="/signup">Sign up</a>
+        </button>
+      )}
       <br />
-      <h4>Your auth key is : {googleAuthKey}</h4>
+      <h4>{googleAuthKey && `Your auth key is : ${googleAuthKey}`}</h4>
     </div>
   );
 };
