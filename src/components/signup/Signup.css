@@ -194,6 +194,20 @@
   transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
+.signup__form .main__form .email-address {
+  text-align: center;
+}
+
+.signup__form .main__form .email-address h4 {
+  font-family: "DM Sans";
+  font-weight: 400;
+  font-size: 20.2823px;
+
+  color: rgb(235, 0, 0);
+
+  margin-top: 8px;
+}
+
 .signup__form .main__form .email-address input {
   width: 405.26px;
   height: 51.53px;
@@ -294,7 +308,7 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-content: center;
+  align-items: center;
 
   width: 405.26px;
   height: 50.14px;
@@ -312,7 +326,6 @@ input[type="checkbox"] {
   color: #ffffff;
 
   border: none;
-
   cursor: pointer;
 }
 
@@ -1292,6 +1305,8 @@ input[type="checkbox"] {
     justify-content: center;
     align-content: center;
 
+    margin: 0 auto;
+
     width: 80vw;
 
     height: 50.14px;
@@ -1366,4 +1381,15 @@ input[type="checkbox"] {
     background: #d8d8d8;
     transition: 0.5s ease-in-out;
   }
+}
+.signup-btn .alert {
+  font-family: "DM Sans";
+  font-weight: 400;
+  font-size: 20.2823px;
+
+  color: rgb(0, 180, 24);
+
+  margin-top: 8px;
+
+  text-align: center;
 }

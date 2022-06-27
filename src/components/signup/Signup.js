@@ -1,16 +1,29 @@
 //react imports
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-//alert
+//custom imports
 import { useAlert } from "react-alert";
+import { useGoogleOneTapLogin } from "react-google-one-tap-login";
+import GoogleOneTapLogin from "react-google-one-tap-login";
+import { useGoogleLogin } from "@react-oauth/google";
+import reactjsAlert from "reactjs-alert";
 
 //css import
 import "./Signup.css";
 
 //icon imports
 import { FaFacebookF, FaGoogle, FaTwitter, FaGithub } from "react-icons/fa";
+import ReactjsAlert from "reactjs-alert";
+
+//client id
+const clientId =
+  "481701370341-hrlv8nd3s6ppvsjlqrream8noefj14kv.apps.googleusercontent.com";
 
 const Signup = () => {
+  //navigation
+  const navigate = useNavigate();
+
   //userData to be posted on API
   const [userData, setUserData] = useState({});
 
@@ -20,13 +33,26 @@ const Signup = () => {
     lastName: "",
     email: "",
     password: "",
+    newsletter: false,
   });
+
+  //handle alert state
+  const [alert, setAlert] = useState(false);
+  const [type, setType] = useState("success");
+  const [title, setTitle] = useState(
+    "You have completed signup successfully. Welcome to website."
+  );
 
   //errors
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
+
+  //validation for every keystroke
+  useEffect(() => {
+    validation(values);
+  }, [values]);
 
   //function to setData for every key stroke
   const setData = (e, key) => {
@@ -36,6 +62,15 @@ const Signup = () => {
     });
   };
 
+  //function to handle newsLetter state
+  const setNewsLetter = () => {
+    setValues({
+      ...values,
+      newsletter: !values.newsletter,
+    });
+  };
+
+  //custom validation function
   const validation = (values) => {
     let errors = {};
 
@@ -50,6 +85,11 @@ const Signup = () => {
       setErrors({
         ...errors,
         email: "Enter a valid email address",
+      });
+    } else {
+      setErrors({
+        ...errors,
+        email: "",
       });
     }
 
@@ -70,18 +110,39 @@ const Signup = () => {
     return errors;
   };
 
-  useEffect(() => {
-    validation(values);
-  }, [values]);
-
   //copy values to userData for JSON format
-  const submitUserDetails = (e) => {
-    e.preventDefault();
-
+  const submitUserDetails = () => {
     setUserData(values);
   };
 
-  console.log({ errors: errors });
+  //handle submit button functions
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    submitUserDetails();
+
+    if (!errors.email) {
+      setAlertUser(true);
+    }
+  };
+
+  //google auth
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      console.log(tokenResponse);
+
+      if (tokenResponse.access_token) {
+        window.localStorage.setItem("auth-key", tokenResponse.access_token);
+
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      }
+    },
+  });
+
+  //alertuser
+  const [alertUser, setAlertUser] = useState(false);
 
   return (
     <div className="signup__container">
@@ -129,6 +190,8 @@ const Signup = () => {
                     value={values.email}
                     onChange={(e) => setData(e, "email")}
                   />
+
+                  {errors.email && <h4>{errors.email}</h4>}
                 </div>
                 <div className="password">
                   <input
@@ -139,15 +202,25 @@ const Signup = () => {
                   />
                 </div>
                 <div className="subscribe">
-                  <input type="checkbox" id="newsletter" />
+                  <input
+                    type="checkbox"
+                    id="newsletter"
+                    value={values.newsletter}
+                    onChange={() => setNewsLetter()}
+                  />
                   <label htmlFor="newsletter">
                     Subscribe to our newsletter
                   </label>
                 </div>
                 <div className="signup-btn">
-                  <button onClick={submitUserDetails}>
+                  <button onClick={handleSubmit}>
                     <h4>SIGN UP</h4>
                   </button>
+                  {alertUser && (
+                    <h4 className="alert">
+                      SIgnup successful. Welcome to website
+                    </h4>
+                  )}
                 </div>
               </div>
             </form>
@@ -160,7 +233,7 @@ const Signup = () => {
                   <FaFacebookF />
                 </div>
                 <div className="google">
-                  <FaGoogle />
+                  <FaGoogle onClick={() => login()} />
                 </div>
                 <div className="twitter">
                   <FaTwitter />
