@@ -121,7 +121,8 @@ const Signup = () => {
 
     submitUserDetails();
 
-    if (!errors.email) {
+    const googleAuthKey = window.localStorage.getItem("auth-key");
+    if (!errors.email || googleAuthKey) {
       setAlertUser(true);
     }
   };
@@ -133,6 +134,8 @@ const Signup = () => {
 
       if (tokenResponse.access_token) {
         window.localStorage.setItem("auth-key", tokenResponse.access_token);
+
+        setAlertUser(true);
 
         setTimeout(() => {
           navigate("/");
