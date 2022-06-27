@@ -8,7 +8,6 @@ const Home = () => {
       <h2>Hey there, You are logged in successfully</h2>
       <br />
       <h4>Your auth key is : {googleAuthKey}</h4>
-      <button onClick={() => alert("hi")}>alert</button>
     </div>
   );
 };
